@@ -1,0 +1,1506 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Glog.AI",
+          "organization": "Glog.AI",
+          "fullName": "Glog, Making software more secure",
+          "version": "1.0.0",
+          "semanticVersion": "1.0.0",
+          "informationUri": "https://www.glog.ai",
+          "rules": [
+            {
+              "id": "glog-96c69a38-7005-4e5e-8efa-f9313be6179d",
+              "help": {
+                "text": "",
+                "markdown": "\"Incompatible Memory Release Function Usage Vulnerability\" in Python refers to a situation where a developer uses an incorrect function to release memory that was allocated using a different function. This can lead to unexpected behavior, crashes, or even security vulnerabilities. In the provided code snippet, the `delete[]` operator is used, which is meant to deallocate memory that was allocated using `new[]`. If the memory pointed to by `mat_blkcsr->blk_row_ptr` was not allocated using `new[]`, this could lead to undefined behavior.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, developers should ensure that they are using the correct function to deallocate memory. If memory was allocated using `new[]`, it should be deallocated using `delete[]`. If it was allocated using `malloc()`, it should be deallocated using `free()`. Mixing these functions can lead to problems.\n\n## Source Code Fix Recommendation\n\nWithout knowing how `mat_blkcsr->blk_row_ptr` was allocated, it's hard to provide a specific fix. However, if it was allocated using `malloc()`, the correct way to deallocate it would be:\n\n```cpp\nfree(mat_blkcsr->blk_row_ptr);\n```\n\n## Library Dependencies\n\nThe provided code snippet appears to be written in C++, not Python. It does not appear to have any library dependencies beyond the standard C++ library.\n\n## OWASP and CWE Links\n\n- [CWE-761: Free of Pointer not at Start of Buffer](https://cwe.mitre.org/data/definitions/761.html)\n\nPlease note that these links are subject to change and may not be available at all times."
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.raptor-mismatched-memory-management-cpp"
+                ]
+              }
+            },
+            {
+              "id": "glog-5f72cc27-1356-4e23-886e-bb3a532fd82d",
+              "help": {
+                "text": "",
+                "markdown": "\"Incompatible Memory Release Function Usage Vulnerability\" is a type of software vulnerability that occurs when a program uses a memory release function that is incompatible with the memory allocation function used to allocate the memory. This can lead to unexpected behavior, including memory corruption, crashes, and other security issues.\n\nIn Python, this vulnerability can occur when a developer uses the `delete[]` operator to deallocate memory that was not allocated with the `new[]` operator. This is a serious issue because it can lead to undefined behavior and potential security vulnerabilities.\n\nMitigation advice:\n\n- Always use the correct memory release function that matches the memory allocation function.\n- Use smart pointers or memory management libraries that automatically handle memory allocation and deallocation.\n- Regularly use static analysis tools to detect potential memory management issues.\n\nSource code fix recommendation:\n\nThe provided code is not Python, but C++. In Python, memory management is handled automatically, so this issue does not occur. However, in C++, the fix would be to ensure that the `new[]` operator was used to allocate `mat_blkcsr->blk_col_ptr`. If `new` was used instead, `delete` should be used to deallocate the memory.\n\n```cpp\n// If this was used to allocate memory\nmat_blkcsr->blk_col_ptr = new int[size];\n\n// This should be used to deallocate memory\ndelete mat_blkcsr->blk_col_ptr;\n```\n\nLibrary dependencies:\n\nThis code appears to be part of a larger program, and the specific libraries required would depend on the rest of the program. However, at a minimum, this code would require the `iostream` library in C++.\n\nOWASP resources:\n\n- [OWASP Code Review Guide](https://owasp.org/www-project-code-review-guide/)\n\nCommon Weakness Enumeration (CWE):\n\n- [CWE-761: Free of Pointer not at Start of Buffer](https://cwe.mitre.org/data/definitions/761.html)\n- [CWE-415: Double Free](https://cwe.mitre.org/data/definitions/415.html)\n\nPlease note that the links provided are active and accessible to anonymous users at the time of writing."
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.raptor-mismatched-memory-management-cpp"
+                ]
+              }
+            },
+            {
+              "id": "glog-3433802d-df46-4225-be18-d185b28406bc",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe \"Detected Issue with C Function (memcpy)\" vulnerability in C++ arises when the `memcpy` function is used improperly, potentially leading to buffer overflows or memory corruption. This typically occurs when the destination buffer is not large enough to hold the data being copied, or when the length of data to be copied is miscalculated. This can result in undefined behavior, crashes, or security vulnerabilities such as data leaks or arbitrary code execution.\n\n### General Mitigation Advice\n\n1. **Validate Buffer Sizes**: Ensure that the destination buffer is large enough to accommodate the data being copied.\n2. **Use Safer Alternatives**: Consider using safer functions like `std::copy` or `std::memmove` if overlapping memory regions are involved.\n3. **Boundary Checks**: Implement boundary checks to prevent buffer overflows.\n4. **Static Analysis Tools**: Use static analysis tools to detect potential buffer overflows during development.\n\n### Source Code Fix Recommendation\n\n```cpp\n#include <cstring> // Required for memcpy\n#include <algorithm> // Required for std::min\n\ntemplate <typename T>\nvoid safe_memcpy(T* A_val, const T* val, size_t len, size_t A_val_size) {\n    // Ensure that we do not copy more than the destination can hold\n    size_t bytes_to_copy = std::min(len * sizeof(T), A_val_size * sizeof(T));\n    std::memcpy(A_val, val, bytes_to_copy);\n}\n```\n\n### Library Dependencies\n\n- `<cstring>`: Required for the `memcpy` function.\n- `<algorithm>`: Required for the `std::min` function.\n\n### Relevant Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n- [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)\n\n### Common Weakness Enumeration\n\n- [CWE-119: Improper Restriction of Operations within the Bounds of a Memory Buffer](https://cwe.mitre.org/data/definitions/119.html)\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS121708"
+                ]
+              }
+            },
+            {
+              "id": "glog-8b3e5347-d193-47f3-b3a5-0996d4cbc084",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe vulnerability in question arises from the use of the `memcpy` function in C++, which is used to copy a block of memory from one location to another. The specific issue here is that the size of the memory being copied is determined by the expression `(nnz * sizeof(T))`. If `nnz` is not properly validated, it can lead to buffer overflows, which can cause undefined behavior, crashes, or security vulnerabilities such as data corruption or code execution.\n\n### General Mitigation Advice\n\n1. **Input Validation**: Ensure that `nnz` is properly validated before being used in the `memcpy` function. It should be checked to ensure it does not exceed the size of the destination buffer.\n2. **Use Safer Alternatives**: Consider using safer alternatives like `std::copy` or `std::memmove` if overlapping memory regions are possible.\n3. **Bounds Checking**: Implement bounds checking to ensure that the destination buffer is large enough to accommodate the data being copied.\n4. **Static Analysis Tools**: Use static analysis tools to detect potential buffer overflows and other vulnerabilities in your code.\n\n### Source Code Fix Recommendation\n\n```cpp\n#include <algorithm> // For std::copy\n#include <cstring>   // For std::memcpy\n\ntemplate <typename T>\nvoid safeMemcpy(T* dest, const T* src, size_t nnz, size_t destSize) {\n    // Ensure that the destination buffer is large enough\n    if (nnz > destSize) {\n        throw std::out_of_range(\"Buffer overflow detected\");\n    }\n    // Use std::copy for safer copying\n    std::copy(src, src + nnz, dest);\n}\n\n// Example usage\nvoid exampleFunction() {\n    const size_t destSize = 100;\n    int dest[destSize];\n    int src[50];\n    size_t nnz = 50;\n\n    // Safe copy\n    safeMemcpy(dest, src, nnz, destSize);\n}\n```\n\n### Library Dependencies\n\n- `<algorithm>`: Required for `std::copy`.\n- `<cstring>`: Required for `std::memcpy` (if used).\n\n### Relevant Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n- [Common Weakness Enumeration (CWE-119: Improper Restriction of Operations within the Bounds of a Memory Buffer)](https://cwe.mitre.org/data/definitions/119.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS121708"
+                ]
+              }
+            },
+            {
+              "id": "glog-2f9d3abf-ee06-4c48-b26f-7c816779e498",
+              "help": {
+                "text": "",
+                "markdown": "\"Incompatible Memory Release Function Usage Vulnerability\" in Python refers to the incorrect usage of memory release functions, which can lead to memory corruption, crashes, or other unpredictable behavior. This vulnerability occurs when a developer uses a function to release or delete a resource that was allocated with a different function. For instance, using `delete[]` to free memory that was allocated with `new` or `malloc`.\n\nMitigation advice:\n\n1. Always use the corresponding function to release memory that was allocated. If you used `new`, use `delete`. If you used `new[]`, use `delete[]`. If you used `malloc`, use `free`.\n\n2. Use smart pointers (`std::unique_ptr`, `std::shared_ptr`) whenever possible. They automatically manage memory and help prevent such issues.\n\n3. Regularly use static code analysis tools to catch such issues early in the development process.\n\nSource code fix recommendation:\n\nAssuming `mat_blkcsr->masks` was allocated with `new`, the correct way to delete it would be:\n\n```cpp\ndelete mat_blkcsr->masks;\n```\n\nIf `mat_blkcsr->masks` is an array allocated with `new[]`, then the original code is correct.\n\nLibrary dependencies:\n\nThis code snippet seems to be written in C++, not Python. It doesn't appear to use any libraries outside of what's included in standard C++. However, without more context, it's impossible to say for sure.\n\nOWASP resources:\n\n\nCWE:\n\n- [CWE-761: Free of Memory not on the Heap](https://cwe.mitre.org/data/definitions/761.html)\n\nPlease note that all the links are active and accessible for anonymous users."
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.raptor-mismatched-memory-management-cpp"
+                ]
+              }
+            },
+            {
+              "id": "glog-5d2fc834-c621-413b-a801-4e65e46e77e7",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe \"Detected Issue with C Function (memcpy)\" vulnerability in C++ arises when the `memcpy` function is used improperly, potentially leading to buffer overflows or memory corruption. This typically occurs when the destination buffer is not large enough to hold the data being copied, or when the length of data to be copied is miscalculated. This can result in undefined behavior, crashes, or security vulnerabilities such as data leaks or arbitrary code execution.\n\n### General Mitigation Advice\n\n1. **Validate Buffer Sizes**: Ensure that the destination buffer is large enough to accommodate the data being copied.\n2. **Use Safer Alternatives**: Consider using safer functions like `std::copy` or `std::memmove` if overlapping memory regions are involved.\n3. **Boundary Checks**: Implement boundary checks to prevent buffer overflows.\n4. **Static Analysis Tools**: Use static analysis tools to detect potential buffer overflows during development.\n\n### Source Code Fix Recommendation\n\n```cpp\n#include <cstring> // Required for memcpy\n#include <algorithm> // Required for std::min\n\ntemplate <typename T>\nvoid safe_memcpy(T* A_val, const T* val, size_t len, size_t A_val_size) {\n    // Ensure that we do not copy more than the destination can hold\n    size_t bytes_to_copy = std::min(len * sizeof(T), A_val_size * sizeof(T));\n    std::memcpy(A_val, val, bytes_to_copy);\n}\n```\n\n### Library Dependencies\n\n- `<cstring>`: Required for the `memcpy` function.\n- `<algorithm>`: Required for the `std::min` function.\n\n### Relevant Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n- [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)\n\n### Common Weakness Enumeration\n\n- [CWE-119: Improper Restriction of Operations within the Bounds of a Memory Buffer](https://cwe.mitre.org/data/definitions/119.html)\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS121708"
+                ]
+              }
+            },
+            {
+              "id": "glog-59d347d0-af2e-4845-898a-565db0721887",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe vulnerability in question arises from the use of the `memcpy` function in C++, which is used to copy a block of memory from one location to another. The specific issue here is that the size of the memory being copied is determined by the expression `(nnz * sizeof(T))`. If `nnz` is not properly validated, it can lead to buffer overflows, which can cause undefined behavior, crashes, or security vulnerabilities such as data corruption or code execution.\n\n### General Mitigation Advice\n\n1. **Input Validation**: Ensure that `nnz` is properly validated before being used in the `memcpy` function. It should be checked to ensure it does not exceed the size of the destination buffer.\n2. **Use Safer Alternatives**: Consider using safer alternatives like `std::copy` or `std::memmove` if overlapping memory regions are possible.\n3. **Bounds Checking**: Implement bounds checking to ensure that the destination buffer is large enough to accommodate the data being copied.\n4. **Static Analysis Tools**: Use static analysis tools to detect potential buffer overflows and other vulnerabilities in your code.\n\n### Source Code Fix Recommendation\n\n```cpp\n#include <algorithm> // For std::copy\n#include <cstring>   // For std::memcpy\n\ntemplate <typename T>\nvoid safeMemcpy(T* dest, const T* src, size_t nnz, size_t destSize) {\n    // Ensure that the destination buffer is large enough\n    if (nnz > destSize) {\n        throw std::out_of_range(\"Buffer overflow detected\");\n    }\n    // Use std::copy for safer copying\n    std::copy(src, src + nnz, dest);\n}\n\n// Example usage\nvoid exampleFunction() {\n    const size_t destSize = 100;\n    int dest[destSize];\n    int src[50];\n    size_t nnz = 50;\n\n    // Safe copy\n    safeMemcpy(dest, src, nnz, destSize);\n}\n```\n\n### Library Dependencies\n\n- `<algorithm>`: Required for `std::copy`.\n- `<cstring>`: Required for `std::memcpy` (if used).\n\n### Relevant Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n- [Common Weakness Enumeration (CWE-119: Improper Restriction of Operations within the Bounds of a Memory Buffer)](https://cwe.mitre.org/data/definitions/119.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS121708"
+                ]
+              }
+            },
+            {
+              "id": "glog-d42b7109-44f8-4963-babe-a7909f8b8be8",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nIncompatible Memory Release Function Vulnerability in Python refers to a situation where a programmer uses a memory deallocation function that is not compatible with the memory allocation function used to allocate the memory. This can lead to unexpected behavior, including memory corruption and application crashes. In the provided code snippet, the `delete[]` operator is used, which is intended to deallocate memory allocated with `new[]`. If the memory pointed to by `ell_csr_hyb_mat->ell_col_ind` was not allocated with `new[]`, this could lead to a vulnerability.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, ensure that the correct memory deallocation function is used for each memory allocation function. In C++, `delete` should be used with `new`, and `delete[]` should be used with `new[]`. In Python, memory management is generally handled by the interpreter, so this type of vulnerability is less common. However, if you are using a Python extension written in C or C++, or if you are using the `ctypes` module to interface with C code, you should be aware of this issue.\n\n## Source Code Fix Recommendation\n\nWithout more context, it's hard to provide a specific fix. However, if `ell_csr_hyb_mat->ell_col_ind` was allocated with `new`, you should use `delete` instead of `delete[]`:\n\n```cpp\ndelete ell_csr_hyb_mat->ell_col_ind;\n```\n\nIf `ell_csr_hyb_mat->ell_col_ind` was allocated with a function other than `new[]` or `new`, you should use the corresponding deallocation function.\n\n## Library Dependencies\n\nThe provided code snippet appears to be C++ rather than Python. It's hard to determine the exact library dependencies without more context, but it seems to involve a custom data structure, so the relevant class definition would be required.\n\n## OWASP and CWE Links\n\n- [CWE-761: Free of Memory not on the Heap](https://cwe.mitre.org/data/definitions/761.html)\n\nPlease note that these links are subject to change and may not be accessible in the future."
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.raptor-mismatched-memory-management-cpp"
+                ]
+              }
+            },
+            {
+              "id": "glog-dc08aec7-2e6c-4c2b-9bef-f529d068ff06",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe \"Detected Issue with C Function (memcpy)\" vulnerability in C++ arises when the `memcpy` function is used improperly, potentially leading to buffer overflows or memory corruption. This typically occurs when the destination buffer is not large enough to hold the data being copied, or when the length of data to be copied is miscalculated. This can result in undefined behavior, crashes, or security vulnerabilities such as data leaks or arbitrary code execution.\n\n### General Mitigation Advice\n\n1. **Validate Buffer Sizes**: Ensure that the destination buffer is large enough to accommodate the data being copied.\n2. **Use Safer Alternatives**: Consider using safer functions like `std::copy` or `std::memmove` if overlapping memory regions are involved.\n3. **Boundary Checks**: Implement boundary checks to prevent buffer overflows.\n4. **Static Analysis Tools**: Use static analysis tools to detect potential buffer overflows during development.\n\n### Source Code Fix Recommendation\n\n```cpp\n#include <cstring> // Required for memcpy\n#include <algorithm> // Required for std::min\n\ntemplate <typename T>\nvoid safe_memcpy(T* A_val, const T* val, size_t len, size_t A_val_size) {\n    // Ensure that we do not copy more than the destination can hold\n    size_t bytes_to_copy = std::min(len * sizeof(T), A_val_size * sizeof(T));\n    std::memcpy(A_val, val, bytes_to_copy);\n}\n```\n\n### Library Dependencies\n\n- `<cstring>`: Required for the `memcpy` function.\n- `<algorithm>`: Required for the `std::min` function.\n\n### Relevant Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n- [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)\n\n### Common Weakness Enumeration\n\n- [CWE-119: Improper Restriction of Operations within the Bounds of a Memory Buffer](https://cwe.mitre.org/data/definitions/119.html)\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS121708"
+                ]
+              }
+            },
+            {
+              "id": "glog-c6042901-006f-4280-a070-29bf04d801b6",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nInsecure API function calls vulnerability in Python refers to the use of functions or methods that are known to be risky due to their potential to create a security vulnerability. In the provided code snippet, the `memcpy` function is used, which is a common source of security issues. This function copies a certain amount of memory from one location to another, and if not used properly, it can lead to buffer overflow vulnerabilities, which can be exploited to execute arbitrary code, alter the intended control flow, read sensitive information, or cause the program to crash.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use safer alternatives to `memcpy` whenever possible. In Python, you can use built-in functions or methods that perform bounds checking to prevent buffer overflow. Also, always validate and sanitize input data before using it in your program. \n\n## Source Code Fix Recommendation\n\nThe provided code snippet seems to be written in C or C++, not Python. However, if we were to translate this to Python, a safer alternative could be using list comprehension or the `copy` method from the `copy` module. Here's an example:\n\n```python\nimport copy\n\n# Assuming vptr and bufval are lists\nvptr = copy.deepcopy(bufval)\n```\n\nIn this Python code, `deepcopy` creates a new copy of `bufval` and assigns it to `vptr`, which is safer than using `memcpy`.\n\n## Library Dependencies\n\nThe provided code snippet does not seem to require any specific Python library dependencies as it is not written in Python.\n\n## OWASP Resources\n\n- [OWASP API Security](https://owasp.org/www-project-api-security/)\n\n## Common Weakness Enumeration (CWE)\n\n- [CWE-676: Use of Potentially Dangerous Function](https://cwe.mitre.org/data/definitions/676.html)\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)\n\nPlease note that the links provided are active and accessible to anonymous users at the time of writing this report."
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.raptor-interesting-api-calls"
+                ]
+              }
+            },
+            {
+              "id": "glog-2a320973-e88d-4806-86a1-e18631994266",
+              "help": {
+                "text": "",
+                "markdown": "The \"Incompatible Memory Release Function Usage Vulnerability\" in Python refers to the incorrect usage of memory release functions, which can lead to memory corruption, crashes, or other unpredictable behavior. This vulnerability occurs when a developer uses a memory release function that is incompatible with the memory allocation function used to allocate the memory. For example, using `delete[]` to free memory that was allocated with `new` instead of `new[]`.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, developers should ensure that they are using the correct memory release function for the memory allocation function used. If memory was allocated with `new`, it should be freed with `delete`. If memory was allocated with `new[]`, it should be freed with `delete[]`.\n\n## Source Code Fix Recommendation\n\nThe provided code snippet is in C++, not Python. However, the general principle of using the correct memory release function still applies. If `ell_csr_hyb_mat->csr_row_id_map` was allocated with `new[]`, then the provided code is correct. If it was allocated with `new`, then the code should be:\n\n```cpp\ndelete ell_csr_hyb_mat->csr_row_id_map;\n```\n\n## Library Dependencies\n\nThe code snippet appears to be part of a larger program, and without more context, it's impossible to determine all the library dependencies. However, it's clear that the code is using a custom data structure (`ell_csr_hyb_mat`), so the code would at least need the appropriate header file that defines this structure.\n\n## OWASP and CWE Links\n\n- [CWE-761: Free of Pointer not at Start of Buffer](https://cwe.mitre.org/data/definitions/761.html)\n\nPlease note that these links are subject to change and may not be available in the future."
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.raptor-mismatched-memory-management-cpp"
+                ]
+              }
+            },
+            {
+              "id": "glog-f2ef4ee5-4d02-4625-8726-0f4675263894",
+              "help": {
+                "text": "",
+                "markdown": "\"Incompatible Memory Release Function Vulnerability\" in Python refers to a situation where a programmer uses an incorrect function to deallocate memory that was allocated using a different function. This can lead to unexpected behavior, crashes, or even security vulnerabilities. In the provided code snippet, the `delete[]` operator is used, which is a C++ operator, not a Python function. This operator is used to delete an array that was created with `new[]`. If the array was not created with `new[]`, using `delete[]` can lead to undefined behavior.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, ensure that the correct function or operator is used to deallocate memory. In Python, memory management is mostly handled by the Python interpreter, and you typically do not need to manually allocate or deallocate memory. If you are interfacing with C++ code, ensure that you are using the correct operators to manage memory.\n\n## Source Code Fix Recommendation\n\nSince the provided code is not Python, it's hard to provide a Python fix. However, in C++, if `csr_mat_br4->csr_col_ptr` was allocated with `new[]`, then using `delete[]` is correct. If it was not allocated with `new[]`, you should use the correct operator or function to deallocate it.\n\n## Library Dependencies\n\nThe provided code appears to be C++, not Python, and seems to be using a custom type or library (`csr_mat_br4`). Without more context, it's hard to say what libraries would be required.\n\n## OWASP and CWE Links\n\n- [CWE-761: Free of Memory not on the Heap](https://cwe.mitre.org/data/definitions/761.html)\n\nPlease note that these links are subject to change and may not be available in the future."
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.raptor-mismatched-memory-management-cpp"
+                ]
+              }
+            },
+            {
+              "id": "glog-f1efab99-d74c-4c66-8f80-776d983b38ed",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe vulnerability in question arises from the use of the `memcpy` function in C++, which can lead to buffer overflow if the destination buffer is not large enough to hold the data being copied. This can result in undefined behavior, including data corruption, crashes, or security vulnerabilities such as arbitrary code execution. The specific issue here is with the line:\n\n```cpp\nmemcpy(dest->col_ind, src->col_ind, (nnz * sizeof(aoclsparse_int)));\n```\n\nIf `dest->col_ind` does not have enough allocated memory to accommodate `(nnz * sizeof(aoclsparse_int))` bytes, a buffer overflow will occur.\n\n### General Mitigation Advice\n\n1. **Ensure Proper Buffer Size**: Always ensure that the destination buffer is large enough to hold the data being copied.\n2. **Use Safer Alternatives**: Consider using safer alternatives like `std::copy` or `std::memmove` if overlapping memory regions are possible.\n3. **Bounds Checking**: Implement bounds checking before performing memory operations to ensure that the destination buffer is adequately sized.\n\n### Source Code Fix Recommendation\n\nTo mitigate the vulnerability, ensure that the destination buffer is properly allocated and use safer memory copying techniques. Here's a revised version of the code:\n\n```cpp\n#include <algorithm> // For std::copy\n#include <cstddef>   // For std::size_t\n\n// Assuming aoclsparse_int is defined somewhere\ntypedef int aoclsparse_int;\n\n// Function to safely copy memory\nvoid safe_memcpy(aoclsparse_int* dest, const aoclsparse_int* src, std::size_t nnz) {\n    if (dest == nullptr || src == nullptr) {\n        // Handle null pointers appropriately\n        return;\n    }\n\n    // Ensure that dest has enough space allocated\n    // This check is context-dependent and should be implemented based on how dest is allocated\n\n    std::copy(src, src + nnz, dest);\n}\n\n// Usage\n// safe_memcpy(dest->col_ind, src->col_ind, nnz);\n```\n\n### Library Dependencies\n\nTo execute the code example properly, the following standard libraries are required:\n\n- `<algorithm>`: For `std::copy`.\n- `<cstddef>`: For `std::size_t`.\n\n### Relevant Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n- [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)\n\n### Common Weakness Enumeration\n\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS121708"
+                ]
+              }
+            },
+            {
+              "id": "glog-81c306bb-f237-43fc-8eec-b524b2835eb5",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe vulnerability in question is related to the use of the `memcpy` function in C++. The `memcpy` function is used to copy a block of memory from one location to another. The specific issue arises when the size of the memory to be copied is not properly validated, which can lead to buffer overflows. This can result in undefined behavior, including data corruption, crashes, or security vulnerabilities such as arbitrary code execution.\n\nIn the provided code snippet, the vulnerability is due to the potential for `nnz * sizeof(aoclsparse_int)` to exceed the size of the destination buffer `dest->row_ind`. If `dest->row_ind` is not large enough to hold the copied data, a buffer overflow will occur.\n\n### General Mitigation Advice\n\n1. **Validate Buffer Sizes**: Ensure that the destination buffer is large enough to hold the data being copied. This can be done by checking the size of the destination buffer before performing the copy operation.\n\n2. **Use Safer Alternatives**: Consider using safer alternatives to `memcpy`, such as `memmove` or `std::copy`, which provide additional safety checks.\n\n3. **Static Analysis Tools**: Use static analysis tools to detect potential buffer overflows and other vulnerabilities in your code.\n\n4. **Code Reviews**: Regularly perform code reviews to catch potential vulnerabilities early in the development process.\n\n### Source Code Fix Recommendation\n\nTo fix the vulnerability, ensure that the destination buffer is large enough to hold the data being copied. Here is a modified version of the code with added checks:\n\n```cpp\n#include <cstring> // For memcpy\n#include <algorithm> // For std::min\n\n// Assuming dest and src are properly defined and initialized\n// and dest->row_ind_size is the size of the destination buffer in bytes\n\nsize_t copy_size = nnz * sizeof(aoclsparse_int);\nif (copy_size <= dest->row_ind_size) {\n    memcpy(dest->row_ind, src->row_ind, copy_size);\n} else {\n    // Handle error: destination buffer is not large enough\n    // This could be logging an error, throwing an exception, etc.\n}\n```\n\n### Library Dependencies\n\nTo execute the code example properly, the following libraries are required:\n\n- `<cstring>`: For the `memcpy` function.\n- `<algorithm>`: For utility functions like `std::min`.\n\n### Relevant OWASP Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n- [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS121708"
+                ]
+              }
+            },
+            {
+              "id": "glog-20a21a79-50ef-455b-a61f-f3f222364423",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe vulnerability in question is related to the use of the `memcpy` function in C++. The `memcpy` function is used to copy a block of memory from one location to another. The specific issue arises when the size of the source buffer (`src_val`) is not properly validated against the size of the destination buffer (`val`). This can lead to a buffer overflow, where more data is copied than the destination buffer can hold, potentially leading to undefined behavior, data corruption, or security vulnerabilities such as arbitrary code execution.\n\n### General Mitigation Advice\n\n1. **Validate Buffer Sizes**: Always ensure that the destination buffer is large enough to hold the data being copied. This can be done by comparing the size of the source data with the size of the destination buffer before performing the copy operation.\n\n2. **Use Safer Alternatives**: Consider using safer alternatives to `memcpy`, such as `std::copy` in C++, which provides bounds checking and type safety.\n\n3. **Static Analysis Tools**: Utilize static analysis tools to detect potential buffer overflows and other vulnerabilities in your code.\n\n4. **Code Reviews**: Regularly perform code reviews to catch potential vulnerabilities early in the development process.\n\n### Source Code Fix Recommendation\n\nTo fix the specific vulnerability, ensure that the destination buffer `val` is large enough to accommodate the data being copied from `src_val`. Here is a revised version of the code:\n\n```cpp\n#include <algorithm> // For std::copy\n#include <cstring>   // For std::memcpy\n\ntemplate <typename T>\nvoid safe_memcpy(T* val, const T* src_val, size_t nnz, size_t dest_size) {\n    // Ensure the destination buffer is large enough\n    if (dest_size >= nnz * sizeof(T)) {\n        std::memcpy(val, src_val, nnz * sizeof(T));\n    } else {\n        // Handle error: destination buffer is too small\n        throw std::runtime_error(\"Destination buffer is too small for memcpy operation.\");\n    }\n}\n\n// Example usage\nvoid example_usage() {\n    const size_t nnz = 10;\n    int src_val[nnz] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};\n    int val[nnz];\n\n    try {\n        safe_memcpy(val, src_val, nnz, sizeof(val));\n    } catch (const std::runtime_error& e) {\n        // Handle error\n        std::cerr << e.what() << std::endl;\n    }\n}\n```\n\n### Library Dependencies\n\n- `<algorithm>`: Required for `std::copy`.\n- `<cstring>`: Required for `std::memcpy`.\n- `<stdexcept>`: Required for `std::runtime_error`.\n- `<iostream>`: Required for `std::cerr`.\n\n### OWASP Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n- [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS121708"
+                ]
+              }
+            },
+            {
+              "id": "glog-b254a1a5-2da2-4a7d-a675-4d2d2118aebc",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nIncompatible Memory Release Function Vulnerability in Python refers to a situation where a programmer uses a function to release or deallocate a memory block that was not allocated by the corresponding allocator. This can lead to unexpected behavior or crashes, as the memory management system may not be able to correctly handle the situation. In Python, this is less common than in languages like C or C++, as Python handles memory management automatically. However, it can still occur in Python when using certain C libraries through Python's ctypes module.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, developers should ensure that they are using the correct function to release memory. This means that if a certain function or method was used to allocate the memory, the corresponding function or method should be used to release it. In Python, this is usually handled automatically, but when using C libraries, developers should be aware of the memory management functions provided by those libraries.\n\n## Source Code Fix Recommendation\n\nThe provided code snippet `delete optd_ptr;` is not Python code, but rather C++ code. In Python, memory management is handled automatically, so there is no direct equivalent to this code. If you are using a C library in Python and need to release memory, you should use the appropriate function provided by that library.\n\n## Library Dependencies\n\nAs this is not a Python code snippet, there are no Python library dependencies.\n\n## OWASP and CWE Links\n\n- [CWE-761: Free of Memory not on the Heap](https://cwe.mitre.org/data/definitions/761.html)\n\nPlease note that these links are subject to change and may not always be accessible."
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.raptor-mismatched-memory-management-cpp"
+                ]
+              }
+            },
+            {
+              "id": "glog-0e945680-df2c-4eda-8994-cfd0e9cb2cd9",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe vulnerability in question involves the use of the `memcpy` function in C++, which is used to copy a block of memory from a source to a destination. The specific issue arises from the expression `((n + 1)` which appears to be incomplete and may lead to undefined behavior, buffer overflows, or memory corruption if not properly handled. This can occur if the size of the data being copied exceeds the size of the destination buffer, leading to potential security vulnerabilities such as data corruption, application crashes, or exploitation by attackers.\n\n### General Mitigation Advice\n\n1. **Validate Input Sizes**: Always ensure that the size of the source data does not exceed the size of the destination buffer.\n2. **Use Safer Alternatives**: Consider using safer alternatives like `memmove` or `std::copy` which provide better safety checks.\n3. **Boundary Checks**: Implement boundary checks to ensure that the destination buffer is large enough to accommodate the data being copied.\n4. **Static Analysis Tools**: Use static analysis tools to detect potential buffer overflows and other memory-related issues.\n\n### Source Code Fix Recommendation\n\nTo fix the vulnerability, ensure that the size of the data being copied is correctly calculated and that the destination buffer is large enough to hold the data. Here is a corrected version of the code:\n\n```cpp\n#include <cstring> // Required for memcpy\n#include <algorithm> // Required for std::min\n\nvoid safeMemcpy(char* dest, const char* src, size_t destSize, size_t n) {\n    // Ensure that we do not copy more than the destination can hold\n    size_t bytesToCopy = std::min(n, destSize - 1);\n    memcpy(dest, src, bytesToCopy);\n    dest[bytesToCopy] = '\\0'; // Null-terminate if dealing with strings\n}\n\n// Usage\n// Assuming dest->col_ptr and src->col_ptr are valid pointers\nsafeMemcpy(dest->col_ptr, src->col_ptr, destBufferSize, n);\n```\n\n### Library Dependencies\n\nTo execute the code example properly, the following standard library headers are required:\n\n- `<cstring>`: For the `memcpy` function.\n- `<algorithm>`: For the `std::min` function.\n\n### Relevant Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n- [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-119: Improper Restriction of Operations within the Bounds of a Memory Buffer](https://cwe.mitre.org/data/definitions/119.html)\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS121708"
+                ]
+              }
+            },
+            {
+              "id": "glog-ef77ff60-087c-4fef-8d58-2c80d560396f",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe vulnerability in question arises from the use of the `memcpy` function in C++. The `memcpy` function is used to copy a block of memory from one location to another. The issue here is that the size parameter passed to `memcpy` is potentially incorrect or unchecked, which can lead to buffer overflows if the destination buffer (`row_ptr`) is not large enough to accommodate the data being copied from the source buffer (`src_mat->csc_mat.col_ptr`). This can result in undefined behavior, including data corruption, crashes, or security vulnerabilities such as arbitrary code execution.\n\n### General Mitigation Advice\n\n1. **Bounds Checking**: Always ensure that the destination buffer is large enough to hold the data being copied. This can be done by performing explicit bounds checking before calling `memcpy`.\n\n2. **Use Safer Alternatives**: Consider using safer alternatives like `std::copy` or `std::memmove` if overlapping memory regions are involved, as they provide better safety guarantees.\n\n3. **Static Analysis Tools**: Use static analysis tools to detect potential buffer overflows and other vulnerabilities in your code.\n\n4. **Code Reviews**: Regularly perform code reviews to catch potential vulnerabilities early in the development process.\n\n### Source Code Fix Recommendation\n\nTo fix the specific vulnerability, ensure that the size of the destination buffer is properly checked and that the correct size is passed to `memcpy`. Here is a revised version of the code:\n\n```cpp\n#include <cstring> // Required for memcpy\n#include <algorithm> // Required for std::min\n\n// Assuming row_ptr and src_mat are properly defined and initialized\nsize_t destination_size = /* size of row_ptr buffer */;\nsize_t source_size = (src_mat->n + 1) * sizeof(*(src_mat->csc_mat.col_ptr));\n\n// Ensure that the destination buffer is large enough\nif (destination_size >= source_size) {\n    memcpy(row_ptr, src_mat->csc_mat.col_ptr, source_size);\n} else {\n    // Handle error: destination buffer is too small\n    // This could involve logging an error, throwing an exception, etc.\n}\n```\n\n### Library Dependencies\n\nTo execute the code example properly, the following library dependencies are required:\n\n- `<cstring>`: For the `memcpy` function.\n- `<algorithm>`: For utility functions like `std::min` if needed for additional safety checks.\n\n### Relevant Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n- [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS121708"
+                ]
+              }
+            },
+            {
+              "id": "glog-ea00dc4e-2818-4896-af3a-a0872550926d",
+              "help": {
+                "text": "",
+                "markdown": "The \"Incompatible Memory Release Function Usage Vulnerability\" in Python refers to a situation where a programmer uses an incorrect function to deallocate memory that was allocated using a different function. This can lead to unexpected behavior, crashes, or even security vulnerabilities. In the provided code snippet, `delete[]` is used, which is a C++ operator, not a Python function. This operator is used to delete an array that was created with `new[]`. If the memory was not allocated with `new[]`, using `delete[]` can lead to undefined behavior.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, always ensure that you are using the correct function to deallocate memory. In Python, memory management is mostly handled by the Python interpreter, and you typically do not need to manually allocate or deallocate memory. If you are interfacing with C++ code, make sure to use the correct `delete` or `delete[]` operator to match the `new` or `new[]` operator that was used to allocate the memory.\n\n## Code Fix Recommendation\n\nSince Python handles memory management for you, you typically do not need to manually deallocate memory. If you are interfacing with C++ code, you should ensure that you are using the correct `delete` or `delete[]` operator. If `new[]` was used to allocate the memory, you should use `delete[]` to deallocate it. If `new` was used, you should use `delete`.\n\n```cpp\n// If the memory was allocated with new[], use delete[]\nint* array = new int[10];\n// ... use array ...\ndelete[] array;\n\n// If the memory was allocated with new, use delete\nint* singleInt = new int;\n// ... use singleInt ...\ndelete singleInt;\n```\n\n## Library Dependencies\n\nThe provided code snippet is in C++, not Python, and does not appear to have any library dependencies.\n\n## OWASP and CWE Links\n\n- [CWE-761: Free of Memory not on the Heap](https://cwe.mitre.org/data/definitions/761.html)\n\nPlease note that these links are subject to change and may not be available in the future."
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.raptor-mismatched-memory-management-cpp"
+                ]
+              }
+            },
+            {
+              "id": "glog-623eeab5-3420-4987-8b91-f71e06cf6e0f",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe vulnerability in question is related to the use of the `memcpy` function in C++. The `memcpy` function is used to copy a block of memory from one location to another. The specific issue arises when the size of the source buffer (`src_val`) is not properly validated against the size of the destination buffer (`val`). This can lead to a buffer overflow, where more data is copied than the destination buffer can hold, potentially leading to undefined behavior, data corruption, or security vulnerabilities such as arbitrary code execution.\n\n### General Mitigation Advice\n\n1. **Validate Buffer Sizes**: Always ensure that the destination buffer is large enough to hold the data being copied. This can be done by comparing the size of the source data with the size of the destination buffer before performing the copy operation.\n\n2. **Use Safer Alternatives**: Consider using safer alternatives to `memcpy`, such as `std::copy` in C++, which provides bounds checking and type safety.\n\n3. **Static Analysis Tools**: Utilize static analysis tools to detect potential buffer overflows and other vulnerabilities in your code.\n\n4. **Code Reviews**: Regularly perform code reviews to catch potential vulnerabilities early in the development process.\n\n### Source Code Fix Recommendation\n\nTo fix the specific vulnerability, ensure that the destination buffer `val` is large enough to accommodate the data being copied from `src_val`. Here is a revised version of the code:\n\n```cpp\n#include <algorithm> // For std::copy\n#include <cstring>   // For std::memcpy\n\ntemplate <typename T>\nvoid safe_memcpy(T* val, const T* src_val, size_t nnz, size_t dest_size) {\n    // Ensure the destination buffer is large enough\n    if (dest_size >= nnz * sizeof(T)) {\n        std::memcpy(val, src_val, nnz * sizeof(T));\n    } else {\n        // Handle error: destination buffer is too small\n        throw std::runtime_error(\"Destination buffer is too small for memcpy operation.\");\n    }\n}\n\n// Example usage\nvoid example_usage() {\n    const size_t nnz = 10;\n    int src_val[nnz] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};\n    int val[nnz];\n\n    try {\n        safe_memcpy(val, src_val, nnz, sizeof(val));\n    } catch (const std::runtime_error& e) {\n        // Handle error\n        std::cerr << e.what() << std::endl;\n    }\n}\n```\n\n### Library Dependencies\n\n- `<algorithm>`: Required for `std::copy`.\n- `<cstring>`: Required for `std::memcpy`.\n- `<stdexcept>`: Required for `std::runtime_error`.\n- `<iostream>`: Required for `std::cerr`.\n\n### OWASP Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n- [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS121708"
+                ]
+              }
+            },
+            {
+              "id": "glog-22afef3b-1cbf-4f2f-82f6-b91de421f9a8",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nIn Python, insecure API function calls vulnerability refers to the use of functions that are known to be risky due to their ability to cause buffer overflow, format string vulnerabilities, or other types of input validation problems. This vulnerability can lead to serious security issues such as code execution, denial of service, or information disclosure.\n\nIn the provided code snippet, the `memcpy` function is used, which is a common source of buffer overflow vulnerabilities. This function copies data from one memory location to another and does not perform any bounds checking. If the size of the data being copied is larger than the destination buffer, it can lead to buffer overflow.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use functions that perform bounds checking or to manually ensure that the size of the data being copied does not exceed the size of the destination buffer. \n\n## Source Code Fix Recommendation\n\nReplace the `memcpy` function with a safer alternative such as `memmove` or `strncpy` that includes bounds checking. Here is an example of how to do this:\n\n```cpp\n#include <cstring> // for std::memmove\n\n// Ensure that bufidx.data() is not larger than the destination buffer\nif (sizeof(aoclsparse_int) * nnz * 4 <= sizeof(cptr)) {\n    std::memmove(cptr, bufidx.data(), sizeof(aoclsparse_int) * nnz * 4);\n} else {\n    // Handle error\n}\n```\n\n## Library Dependencies\n\nThe provided code snippet appears to be written in C++, not Python. The `memcpy` function is part of the C standard library, which is included in C++ as well. The `bufidx.data()` suggests that `bufidx` is an object of a class that has a `data` method, but without more context, it's impossible to determine what libraries this code depends on.\n\n## References\n\n- [CWE-676: Use of Potentially Dangerous Function](https://cwe.mitre.org/data/definitions/676.html)"
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.raptor-interesting-api-calls"
+                ]
+              }
+            },
+            {
+              "id": "glog-43e9fc46-1710-434b-b2d0-e87e54ef60aa",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe vulnerability in question arises from the use of the `memcpy` function in C/C++ programming, which can lead to buffer overflow if the destination buffer is not large enough to hold the data being copied. In the provided code snippet, `memcpy(dest->row_idx, src->row_idx, (nnz * sizeof(aoclsparse_int)))`, the function copies `nnz * sizeof(aoclsparse_int)` bytes from `src->row_idx` to `dest->row_idx`. If `dest->row_idx` does not have sufficient space allocated, this can result in a buffer overflow, leading to potential data corruption, crashes, or security vulnerabilities.\n\n### General Mitigation Advice\n\n1. **Ensure Proper Buffer Size**: Always ensure that the destination buffer is large enough to accommodate the data being copied.\n2. **Use Safer Alternatives**: Consider using safer alternatives like `memmove` if overlapping memory regions are possible, or `std::copy` in C++ for type safety and bounds checking.\n3. **Boundary Checks**: Implement boundary checks before performing memory operations to ensure that the source and destination buffers are within valid ranges.\n4. **Static Analysis Tools**: Use static analysis tools to detect potential buffer overflows and other vulnerabilities in the code.\n\n### Source Code Fix Recommendation\n\nTo mitigate the vulnerability, ensure that the destination buffer is properly sized and consider using safer functions. Here's a revised version of the code:\n\n```cpp\n#include <algorithm> // For std::copy\n#include <cstring>   // For std::memcpy\n\n// Assuming aoclsparse_int is defined somewhere\ntypedef int aoclsparse_int;\n\n// Ensure dest->row_idx is properly allocated\nvoid safe_memcpy(aoclsparse_int* dest_row_idx, const aoclsparse_int* src_row_idx, size_t nnz) {\n    // Check if dest_row_idx is large enough\n    if (dest_row_idx == nullptr || src_row_idx == nullptr) {\n        // Handle error: null pointer\n        return;\n    }\n\n    // Use std::copy for type safety and bounds checking\n    std::copy(src_row_idx, src_row_idx + nnz, dest_row_idx);\n}\n\n// Example usage\nvoid example_usage() {\n    size_t nnz = 100; // Example size\n    aoclsparse_int* src_row_idx = new aoclsparse_int[nnz];\n    aoclsparse_int* dest_row_idx = new aoclsparse_int[nnz];\n\n    // Initialize src_row_idx with data\n    // ...\n\n    // Perform safe copy\n    safe_memcpy(dest_row_idx, src_row_idx, nnz);\n\n    // Clean up\n    delete[] src_row_idx;\n    delete[] dest_row_idx;\n}\n```\n\n### Library Dependencies\n\nTo execute the code example properly, the following libraries are required:\n\n- `<algorithm>`: For `std::copy`.\n- `<cstring>`: For `std::memcpy`.\n\n### Relevant OWASP Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n- [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS121708"
+                ]
+              }
+            },
+            {
+              "id": "glog-8c38f9e2-0574-4b61-9dcf-6fe91c783555",
+              "help": {
+                "text": "",
+                "markdown": "### Description\n\nThe \"Detected Issue with C Function (memcpy)\" vulnerability in C++ arises when the `memcpy` function is used improperly, potentially leading to buffer overflows, data corruption, or undefined behavior. This vulnerability typically occurs when the destination buffer is not large enough to hold the data being copied, or when the source or destination pointers are invalid.\n\nIn the provided code snippet:\n\n```cpp\nmemcpy(col_ind, src_mat->csr_mat.csr_col_ptr, src_mat->nnz * sizeof(aoclsparse_int));\n```\n\nThe vulnerability may occur if `col_ind` does not have enough allocated memory to accommodate `src_mat->nnz * sizeof(aoclsparse_int)` bytes. This can lead to overwriting adjacent memory, causing unpredictable behavior or security vulnerabilities.\n\n### General Mitigation Advice\n\n1. **Validate Buffer Sizes**: Ensure that the destination buffer is large enough to hold the data being copied.\n2. **Use Safer Alternatives**: Consider using safer functions like `memmove` if overlapping memory regions are possible, or higher-level abstractions that automatically manage memory.\n3. **Boundary Checks**: Implement boundary checks before performing memory operations to prevent overflows.\n4. **Static Analysis Tools**: Use static analysis tools to detect potential buffer overflows and other vulnerabilities in the code.\n\n### Source Code Fix Recommendation\n\nTo mitigate the vulnerability in the provided code snippet, ensure that `col_ind` is properly allocated with sufficient size:\n\n```cpp\n// Ensure col_ind is allocated with at least src_mat->nnz elements\nsize_t required_size = src_mat->nnz * sizeof(aoclsparse_int);\ncol_ind = (aoclsparse_int*)malloc(required_size);\nif (col_ind == NULL) {\n    // Handle memory allocation failure\n    fprintf(stderr, \"Memory allocation failed\\n\");\n    exit(EXIT_FAILURE);\n}\n\n// Perform the memcpy operation safely\nmemcpy(col_ind, src_mat->csr_mat.csr_col_ptr, required_size);\n```\n\n### Library Dependencies\n\nTo execute the code example properly, ensure the following libraries are included:\n\n- Standard C Library (`stdlib.h`, `stdio.h` for memory allocation and I/O operations)\n- Any specific library headers required for `aoclsparse_int` and related data structures\n\n### Relevant Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n- [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-119: Improper Restriction of Operations within the Bounds of a Memory Buffer](https://cwe.mitre.org/data/definitions/119.html)\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS121708"
+                ]
+              }
+            },
+            {
+              "id": "glog-0ce6fa32-47cf-49d1-aa97-3cc6bd1d0321",
+              "help": {
+                "text": "",
+                "markdown": "\"Incompatible Memory Release Function Usage Vulnerability\" in Python refers to the situation where a programmer uses an incorrect function to release memory that was allocated using a different function. This can lead to unexpected behavior, including memory leaks, corruption, and crashes. In Python, this is less common due to its garbage collection mechanism, but it can still occur in certain cases, especially when interfacing with C/C++ code using libraries like ctypes or cffi.\n\nIn the provided code snippet, `delete[] *iurow;`, it seems to be C++ code, not Python. This line is trying to delete an array pointed to by `iurow`. If `iurow` was not allocated with `new[]`, this could lead to undefined behavior.\n\n## Mitigation\n\nTo mitigate this vulnerability, always ensure that you are using the correct function to release memory. In Python, this is usually handled automatically, but when using libraries like ctypes or cffi to interface with C/C++ code, you need to be careful.\n\nIf you're writing C++ code, always use `delete[]` for memory allocated with `new[]` and `delete` for memory allocated with `new`. Never mix these up.\n\n## Code Fix\n\nWithout the full context of the code, it's hard to provide a specific fix. However, the general rule is to ensure that the correct delete function is used. If `iurow` is an array allocated with `new[]`, then `delete[] *iurow;` is correct. If not, and `iurow` was allocated with `new`, then the correct code would be `delete *iurow;`.\n\n## Library Dependencies\n\nThe provided code snippet is in C++, not Python, so it doesn't have any Python library dependencies. If it's part of a larger C++ program, it might have dependencies on the C++ Standard Library.\n\n## OWASP and CWE Resources\n\n- [CWE-761: Free of Pointer not at Start of Buffer](https://cwe.mitre.org/data/definitions/761.html)\n\nPlease note that these links are subject to change and may not always be accessible."
+              },
+              "properties": {
+                "tags": [
+                  "resources.rules.raptor-mismatched-memory-management-cpp"
+                ]
+              }
+            }
+          ],
+          "language": "en-US",
+          "contents": [
+            "localizedData",
+            "nonLocalizedData"
+          ],
+          "isComprehensive": false
+        }
+      },
+      "language": "en-US",
+      "results": [
+        {
+          "ruleId": "glog-96c69a38-7005-4e5e-8efa-f9313be6179d",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Incompatible Memory Release Function Usage Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/analysis/aoclsparse_analysis.cpp",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 160,
+                  "startColumn": 21,
+                  "endLine": 160,
+                  "endColumn": 54,
+                  "snippet": {
+                    "text": "                    delete[] mat_blkcsr->blk_row_ptr;"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "c60a21c3f491c15d8b544c764d0032a206f4e0fa025ede832aa8d6de1ae06b7f9a58bb468a0cfe32de8b94a4eba6946055642398f1c74c2f96cab80106613399_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-5f72cc27-1356-4e23-886e-bb3a532fd82d",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Incompatible Memory Release Function Usage Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/analysis/aoclsparse_analysis.cpp",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 161,
+                  "startColumn": 21,
+                  "endLine": 161,
+                  "endColumn": 54,
+                  "snippet": {
+                    "text": "                    delete[] mat_blkcsr->blk_col_ptr;"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "4f0c6e151fcb315bdd786f82794e84458bce0eb8272853071e80e7f3c461aff72a61be7ec95abcee0722d81963cf7facf093a3b5c5d375c704069ebe6337bee8_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-3433802d-df46-4225-be18-d185b28406bc",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "\"Detected Issue with C Function (memcpy)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/extra/aoclsparse_auxiliary.hpp"
+                },
+                "region": {
+                  "startLine": 264,
+                  "startColumn": 8,
+                  "endLine": 264,
+                  "endColumn": 42,
+                  "charOffset": 11848,
+                  "charLength": 34,
+                  "snippet": {
+                    "text": "memcpy(A_val, val, len * sizeof(T)",
+                    "rendered": {
+                      "text": "memcpy(A_val, val, len * sizeof(T)",
+                      "markdown": "`memcpy(A_val, val, len * sizeof(T)`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "There are a number of conditions in which memcpy can introduce a vulnerability (mismatched buffer sizes, null pointers, etc.). More secure alternitives perform additional validation of the source and destination buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "library/src/extra/aoclsparse_auxiliary.hpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 11848,
+                        "charLength": 34
+                      },
+                      "insertedContent": {
+                        "text": "memcpy_s(A_val, <size of A_val>,  val,  len * sizeof(T)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "BestPractice",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.ProblematicFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "glog-8b3e5347-d193-47f3-b3a5-0996d4cbc084",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "\"Detected Issue with C Function (memcpy)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/extra/aoclsparse_auxiliary.cpp"
+                },
+                "region": {
+                  "startLine": 1567,
+                  "startColumn": 4,
+                  "endLine": 1567,
+                  "endColumn": 48,
+                  "charOffset": 63627,
+                  "charLength": 44,
+                  "snippet": {
+                    "text": "memcpy(dest->val, src->val, (nnz * sizeof(T)",
+                    "rendered": {
+                      "text": "memcpy(dest->val, src->val, (nnz * sizeof(T)",
+                      "markdown": "`memcpy(dest->val, src->val, (nnz * sizeof(T)`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "There are a number of conditions in which memcpy can introduce a vulnerability (mismatched buffer sizes, null pointers, etc.). More secure alternitives perform additional validation of the source and destination buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "library/src/extra/aoclsparse_auxiliary.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 63627,
+                        "charLength": 44
+                      },
+                      "insertedContent": {
+                        "text": "memcpy_s(dest->val, <size of dest->val>,  src->val,  (nnz * sizeof(T)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "BestPractice",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.ProblematicFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "glog-2f9d3abf-ee06-4c48-b26f-7c816779e498",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Incompatible Memory Release Function Usage Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/analysis/aoclsparse_analysis.cpp",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 163,
+                  "startColumn": 21,
+                  "endLine": 163,
+                  "endColumn": 48,
+                  "snippet": {
+                    "text": "                    delete[] mat_blkcsr->masks;"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "78caf3bb94bb7d2596ad678836f61cefdf4ca323678cb4d46f2243c8998c7d23173a6e5f8f6a2b3bf84cfc3ba6b8b827f202a94c4f362fcea0c38ec8abaca70b_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-5d2fc834-c621-413b-a801-4e65e46e77e7",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "\"Detected Issue with C Function (memcpy)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/extra/aoclsparse_auxiliary.hpp"
+                },
+                "region": {
+                  "startLine": 272,
+                  "startColumn": 8,
+                  "endLine": 272,
+                  "endColumn": 42,
+                  "charOffset": 12136,
+                  "charLength": 34,
+                  "snippet": {
+                    "text": "memcpy(A_val, val, len * sizeof(T)",
+                    "rendered": {
+                      "text": "memcpy(A_val, val, len * sizeof(T)",
+                      "markdown": "`memcpy(A_val, val, len * sizeof(T)`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "There are a number of conditions in which memcpy can introduce a vulnerability (mismatched buffer sizes, null pointers, etc.). More secure alternitives perform additional validation of the source and destination buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "library/src/extra/aoclsparse_auxiliary.hpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 12136,
+                        "charLength": 34
+                      },
+                      "insertedContent": {
+                        "text": "memcpy_s(A_val, <size of A_val>,  val,  len * sizeof(T)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "BestPractice",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.ProblematicFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "glog-59d347d0-af2e-4845-898a-565db0721887",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "\"Detected Issue with C Function (memcpy)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/extra/aoclsparse_auxiliary.cpp"
+                },
+                "region": {
+                  "startLine": 1525,
+                  "startColumn": 4,
+                  "endLine": 1525,
+                  "endColumn": 48,
+                  "charOffset": 62441,
+                  "charLength": 44,
+                  "snippet": {
+                    "text": "memcpy(dest->val, src->val, (nnz * sizeof(T)",
+                    "rendered": {
+                      "text": "memcpy(dest->val, src->val, (nnz * sizeof(T)",
+                      "markdown": "`memcpy(dest->val, src->val, (nnz * sizeof(T)`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "There are a number of conditions in which memcpy can introduce a vulnerability (mismatched buffer sizes, null pointers, etc.). More secure alternitives perform additional validation of the source and destination buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "library/src/extra/aoclsparse_auxiliary.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 62441,
+                        "charLength": 44
+                      },
+                      "insertedContent": {
+                        "text": "memcpy_s(dest->val, <size of dest->val>,  src->val,  (nnz * sizeof(T)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "BestPractice",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.ProblematicFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "glog-d42b7109-44f8-4963-babe-a7909f8b8be8",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Incompatible Memory Release Function Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/analysis/aoclsparse_analysis.cpp",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 226,
+                  "startColumn": 13,
+                  "endLine": 226,
+                  "endColumn": 51,
+                  "snippet": {
+                    "text": "            delete[] ell_csr_hyb_mat->ell_col_ind;"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "a08140a42c7a19f468939aba6e50d19658d4b078599a971180a5db3d67d9054197bf65b346593c1af25bb453657011a34adee34ee3d08ac847088b3d6b91c44e_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-dc08aec7-2e6c-4c2b-9bef-f529d068ff06",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "\"Detected Issue with C Function (memcpy)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/extra/aoclsparse_auxiliary.hpp"
+                },
+                "region": {
+                  "startLine": 268,
+                  "startColumn": 8,
+                  "endLine": 268,
+                  "endColumn": 42,
+                  "charOffset": 11992,
+                  "charLength": 34,
+                  "snippet": {
+                    "text": "memcpy(A_val, val, len * sizeof(T)",
+                    "rendered": {
+                      "text": "memcpy(A_val, val, len * sizeof(T)",
+                      "markdown": "`memcpy(A_val, val, len * sizeof(T)`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "There are a number of conditions in which memcpy can introduce a vulnerability (mismatched buffer sizes, null pointers, etc.). More secure alternitives perform additional validation of the source and destination buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "library/src/extra/aoclsparse_auxiliary.hpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 11992,
+                        "charLength": 34
+                      },
+                      "insertedContent": {
+                        "text": "memcpy_s(A_val, <size of A_val>,  val,  len * sizeof(T)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "BestPractice",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.ProblematicFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "glog-c6042901-006f-4280-a070-29bf04d801b6",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Identifying and Tracing Insecure API Function Calls Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/analysis/aoclsparse_analysis.cpp",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 370,
+                  "startColumn": 17,
+                  "endLine": 370,
+                  "endColumn": 70,
+                  "snippet": {
+                    "text": "                memcpy(vptr, bufval.data(), sizeof(double) * nnz * 4);"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "6a9450dbe8ad6993c6d2fffddfa84bb7173e8d5856a20dd35fb66a02a7db960132b57e1afc8b48a52125521318ddaa971251a9ef4d5866e2b919648a377caf4b_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-2a320973-e88d-4806-86a1-e18631994266",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Incompatible Memory Release Function Usage Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/analysis/aoclsparse_analysis.cpp",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 227,
+                  "startColumn": 13,
+                  "endLine": 227,
+                  "endColumn": 54,
+                  "snippet": {
+                    "text": "            delete[] ell_csr_hyb_mat->csr_row_id_map;"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "810cff0ea7f655a080ffe667b5fd65a690fd68b2d73b1b114f2b728b194a56b7f26533207f9ab7554699060e80508c3ec6f0720a0505f3e07c772dd3b4cb8d6c_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-f2ef4ee5-4d02-4625-8726-0f4675263894",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Incompatible Memory Release Function Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/analysis/aoclsparse_analysis.cpp",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 319,
+                  "startColumn": 17,
+                  "endLine": 319,
+                  "endColumn": 51,
+                  "snippet": {
+                    "text": "                delete[] csr_mat_br4->csr_col_ptr;"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "645ed1932f0cebf17176a0ea68f67a22e3c6368b7df90c99324e8d5ed04a51c43b307480a74731f5ae540544e015d1a586e22c43746744dbe911d4ad6141581a_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-f1efab99-d74c-4c66-8f80-776d983b38ed",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "\"Detected Issue with C Function: memcpy\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/extra/aoclsparse_auxiliary.cpp"
+                },
+                "region": {
+                  "startLine": 1566,
+                  "startColumn": 4,
+                  "endLine": 1566,
+                  "endColumn": 69,
+                  "charOffset": 63554,
+                  "charLength": 65,
+                  "snippet": {
+                    "text": "memcpy(dest->col_ind, src->col_ind, (nnz * sizeof(aoclsparse_int)",
+                    "rendered": {
+                      "text": "memcpy(dest->col_ind, src->col_ind, (nnz * sizeof(aoclsparse_int)",
+                      "markdown": "`memcpy(dest->col_ind, src->col_ind, (nnz * sizeof(aoclsparse_int)`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "There are a number of conditions in which memcpy can introduce a vulnerability (mismatched buffer sizes, null pointers, etc.). More secure alternitives perform additional validation of the source and destination buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "library/src/extra/aoclsparse_auxiliary.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 63554,
+                        "charLength": 65
+                      },
+                      "insertedContent": {
+                        "text": "memcpy_s(dest->col_ind, <size of dest->col_ind>,  src->col_ind,  (nnz * sizeof(aoclsparse_int)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "BestPractice",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.ProblematicFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "glog-81c306bb-f237-43fc-8eec-b524b2835eb5",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "\"Detected Issue with C Function (memcpy)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/extra/aoclsparse_auxiliary.cpp"
+                },
+                "region": {
+                  "startLine": 1565,
+                  "startColumn": 4,
+                  "endLine": 1565,
+                  "endColumn": 69,
+                  "charOffset": 63481,
+                  "charLength": 65,
+                  "snippet": {
+                    "text": "memcpy(dest->row_ind, src->row_ind, (nnz * sizeof(aoclsparse_int)",
+                    "rendered": {
+                      "text": "memcpy(dest->row_ind, src->row_ind, (nnz * sizeof(aoclsparse_int)",
+                      "markdown": "`memcpy(dest->row_ind, src->row_ind, (nnz * sizeof(aoclsparse_int)`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "There are a number of conditions in which memcpy can introduce a vulnerability (mismatched buffer sizes, null pointers, etc.). More secure alternitives perform additional validation of the source and destination buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "library/src/extra/aoclsparse_auxiliary.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 63481,
+                        "charLength": 65
+                      },
+                      "insertedContent": {
+                        "text": "memcpy_s(dest->row_ind, <size of dest->row_ind>,  src->row_ind,  (nnz * sizeof(aoclsparse_int)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "BestPractice",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.ProblematicFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "glog-20a21a79-50ef-455b-a61f-f3f222364423",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "\"Detected Issue with C Function: memcpy\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/conversion/aoclsparse_convert.cpp"
+                },
+                "region": {
+                  "startLine": 1075,
+                  "startColumn": 12,
+                  "endLine": 1075,
+                  "endColumn": 57,
+                  "charOffset": 47864,
+                  "charLength": 45,
+                  "snippet": {
+                    "text": "memcpy(val, src_val, src_mat->nnz * sizeof(T)",
+                    "rendered": {
+                      "text": "memcpy(val, src_val, src_mat->nnz * sizeof(T)",
+                      "markdown": "`memcpy(val, src_val, src_mat->nnz * sizeof(T)`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "There are a number of conditions in which memcpy can introduce a vulnerability (mismatched buffer sizes, null pointers, etc.). More secure alternitives perform additional validation of the source and destination buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "library/src/conversion/aoclsparse_convert.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 47864,
+                        "charLength": 45
+                      },
+                      "insertedContent": {
+                        "text": "memcpy_s(val, <size of val>,  src_val,  src_mat->nnz * sizeof(T)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "BestPractice",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.ProblematicFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "glog-b254a1a5-2da2-4a7d-a675-4d2d2118aebc",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Incompatible Memory Release Function Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/analysis/aoclsparse_csr_util.cpp",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 38,
+                  "startColumn": 9,
+                  "endLine": 38,
+                  "endColumn": 25,
+                  "snippet": {
+                    "text": "        delete optd_ptr;"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "ca80f11f11f55a13476137735202a2e3418fc134e64e8b8e45a63459762ef3cd969a43a25f9ab6c4f48bd32a6d7190cb992406b07a627ac6680c6150bd599d0d_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-0e945680-df2c-4eda-8994-cfd0e9cb2cd9",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "\"Detected Issue with C Function (memcpy)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/extra/aoclsparse_auxiliary.cpp"
+                },
+                "region": {
+                  "startLine": 1524,
+                  "startColumn": 4,
+                  "endLine": 1524,
+                  "endColumn": 48,
+                  "charOffset": 62364,
+                  "charLength": 44,
+                  "snippet": {
+                    "text": "memcpy(dest->col_ptr, src->col_ptr, ((n + 1)",
+                    "rendered": {
+                      "text": "memcpy(dest->col_ptr, src->col_ptr, ((n + 1)",
+                      "markdown": "`memcpy(dest->col_ptr, src->col_ptr, ((n + 1)`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "There are a number of conditions in which memcpy can introduce a vulnerability (mismatched buffer sizes, null pointers, etc.). More secure alternitives perform additional validation of the source and destination buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "library/src/extra/aoclsparse_auxiliary.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 62364,
+                        "charLength": 44
+                      },
+                      "insertedContent": {
+                        "text": "memcpy_s(dest->col_ptr, <size of dest->col_ptr>,  src->col_ptr,  ((n + 1)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "BestPractice",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.ProblematicFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "glog-ef77ff60-087c-4fef-8d58-2c80d560396f",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "\"Detected Issue with C Function (memcpy)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/conversion/aoclsparse_convert.cpp"
+                },
+                "region": {
+                  "startLine": 1073,
+                  "startColumn": 12,
+                  "endLine": 1073,
+                  "endColumn": 70,
+                  "charOffset": 47672,
+                  "charLength": 58,
+                  "snippet": {
+                    "text": "memcpy(row_ptr, src_mat->csc_mat.col_ptr, (src_mat->n + 1)",
+                    "rendered": {
+                      "text": "memcpy(row_ptr, src_mat->csc_mat.col_ptr, (src_mat->n + 1)",
+                      "markdown": "`memcpy(row_ptr, src_mat->csc_mat.col_ptr, (src_mat->n + 1)`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "There are a number of conditions in which memcpy can introduce a vulnerability (mismatched buffer sizes, null pointers, etc.). More secure alternitives perform additional validation of the source and destination buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "library/src/conversion/aoclsparse_convert.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 47672,
+                        "charLength": 58
+                      },
+                      "insertedContent": {
+                        "text": "memcpy_s(row_ptr, <size of row_ptr>,  src_mat->csc_mat.col_ptr,  (src_mat->n + 1)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "BestPractice",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.ProblematicFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "glog-ea00dc4e-2818-4896-af3a-a0872550926d",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Incompatible Memory Release Function Usage Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/analysis/aoclsparse_csr_util.cpp",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 393,
+                  "startColumn": 9,
+                  "endLine": 393,
+                  "endColumn": 25,
+                  "snippet": {
+                    "text": "        delete[] *idiag;"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "6a374bc66f66384cd518bd794cf92f924c8e9850ae5fba0baad04973073b225bc9fcd230f1a7b816fd67063a0da4529f69d4cc94b5c445b8114eec7281389ae5_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-623eeab5-3420-4987-8b91-f71e06cf6e0f",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "\"Detected Issue with C Function: memcpy\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/conversion/aoclsparse_convert.cpp"
+                },
+                "region": {
+                  "startLine": 1036,
+                  "startColumn": 12,
+                  "endLine": 1036,
+                  "endColumn": 57,
+                  "charOffset": 45981,
+                  "charLength": 45,
+                  "snippet": {
+                    "text": "memcpy(val, src_val, src_mat->nnz * sizeof(T)",
+                    "rendered": {
+                      "text": "memcpy(val, src_val, src_mat->nnz * sizeof(T)",
+                      "markdown": "`memcpy(val, src_val, src_mat->nnz * sizeof(T)`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "There are a number of conditions in which memcpy can introduce a vulnerability (mismatched buffer sizes, null pointers, etc.). More secure alternitives perform additional validation of the source and destination buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "library/src/conversion/aoclsparse_convert.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 45981,
+                        "charLength": 45
+                      },
+                      "insertedContent": {
+                        "text": "memcpy_s(val, <size of val>,  src_val,  src_mat->nnz * sizeof(T)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "BestPractice",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.ProblematicFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "glog-22afef3b-1cbf-4f2f-82f6-b91de421f9a8",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Identifying and Tracing Insecure API Function Calls Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/analysis/aoclsparse_analysis.cpp",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 371,
+                  "startColumn": 17,
+                  "endLine": 371,
+                  "endColumn": 78,
+                  "snippet": {
+                    "text": "                memcpy(cptr, bufidx.data(), sizeof(aoclsparse_int) * nnz * 4);"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "6a9450dbe8ad6993c6d2fffddfa84bb7173e8d5856a20dd35fb66a02a7db960132b57e1afc8b48a52125521318ddaa971251a9ef4d5866e2b919648a377caf4b_1"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "glog-43e9fc46-1710-434b-b2d0-e87e54ef60aa",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "\"Identified Issue with C Function: memcpy\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/extra/aoclsparse_auxiliary.cpp"
+                },
+                "region": {
+                  "startLine": 1523,
+                  "startColumn": 4,
+                  "endLine": 1523,
+                  "endColumn": 69,
+                  "charOffset": 62291,
+                  "charLength": 65,
+                  "snippet": {
+                    "text": "memcpy(dest->row_idx, src->row_idx, (nnz * sizeof(aoclsparse_int)",
+                    "rendered": {
+                      "text": "memcpy(dest->row_idx, src->row_idx, (nnz * sizeof(aoclsparse_int)",
+                      "markdown": "`memcpy(dest->row_idx, src->row_idx, (nnz * sizeof(aoclsparse_int)`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "There are a number of conditions in which memcpy can introduce a vulnerability (mismatched buffer sizes, null pointers, etc.). More secure alternitives perform additional validation of the source and destination buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "library/src/extra/aoclsparse_auxiliary.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 62291,
+                        "charLength": 65
+                      },
+                      "insertedContent": {
+                        "text": "memcpy_s(dest->row_idx, <size of dest->row_idx>,  src->row_idx,  (nnz * sizeof(aoclsparse_int)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "BestPractice",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.ProblematicFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "glog-8c38f9e2-0574-4b61-9dcf-6fe91c783555",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "\"Detected Issue with C Function (memcpy)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/conversion/aoclsparse_convert.cpp"
+                },
+                "region": {
+                  "startLine": 1035,
+                  "startColumn": 12,
+                  "endLine": 1035,
+                  "endColumn": 95,
+                  "charOffset": 45883,
+                  "charLength": 83,
+                  "snippet": {
+                    "text": "memcpy(col_ind, src_mat->csr_mat.csr_col_ptr, src_mat->nnz * sizeof(aoclsparse_int)",
+                    "rendered": {
+                      "text": "memcpy(col_ind, src_mat->csr_mat.csr_col_ptr, src_mat->nnz * sizeof(aoclsparse_int)",
+                      "markdown": "`memcpy(col_ind, src_mat->csr_mat.csr_col_ptr, src_mat->nnz * sizeof(aoclsparse_int)`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "There are a number of conditions in which memcpy can introduce a vulnerability (mismatched buffer sizes, null pointers, etc.). More secure alternitives perform additional validation of the source and destination buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "library/src/conversion/aoclsparse_convert.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 45883,
+                        "charLength": 83
+                      },
+                      "insertedContent": {
+                        "text": "memcpy_s(col_ind, <size of col_ind>,  src_mat->csr_mat.csr_col_ptr,  src_mat->nnz * sizeof(aoclsparse_int)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "BestPractice",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.ProblematicFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "glog-0ce6fa32-47cf-49d1-aa97-3cc6bd1d0321",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Incompatible Memory Release Function Usage Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "library/src/analysis/aoclsparse_csr_util.cpp",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 395,
+                  "startColumn": 9,
+                  "endLine": 395,
+                  "endColumn": 25,
+                  "snippet": {
+                    "text": "        delete[] *iurow;"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "578783d595533bd6e41a2b286d2e4c8e2122ce404ac165afb22eff56eb8d8e50a93ce3ca47e42a7c47b1c25eb1a2312924926a956a710ca325e161d65bd33759_0"
+          },
+          "properties": {}
+        }
+      ],
+      "newlineSequences": [
+        "\r\n",
+        "\n"
+      ]
+    }
+  ]
+}
